@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>3D旋转盒子 | Monhitul</title>
 <meta name="viewport" content="width=device-width" />
+<script src="jquery-1.11.3.min.js"></script>
+<script src="vue.min.js"></script>
+<script src="jquery-touchrotate.js"></script>
 <style type="text/css">
 	[v-clock]{display: none}
 	body { 
@@ -37,10 +40,6 @@
 </head>
 
 <body>
-<div style="text-align:center;clear:both;">
-<script src="/gg_bd_ad_720x90.js" type="text/javascript"></script>
-<script src="/follow.js" type="text/javascript"></script>
-</div>
 	<div id="app" v-cloak>
 		<div class="picbtn">
 			<!-- <p>
@@ -63,14 +62,14 @@
 	
 				选择后图
 				<input type="file" value="选择后图" accept="image/*" @change="uploadImg($event,6)">
-			</p>
-		长<input type="number" id="length" value="" v-model="size.x" >
+			</p> -->
+		<!-- 长<input type="number" id="length" value="" v-model="size.x" >
 		宽<input type="number" id="width" value="" v-model="size.y">
-		高<input type="number" id="height" value="" v-model="size.z">
-		</div> -->
+		高<input type="number" id="height" value="" v-model="size.z"> -->
+		</div>
 
 		<!-- 盒子模型 -->
-		<div class="box" :style="{width:size.x+'px',height:size.z+'px'}">
+		<div class="box" :style="{width:size.x+'px',height:size.z+'px'}" style="margin-top: 8rem">
 			<div id="top" :style="styleTop"></div>
 			<div id="bottom" :style="styleBottom"></div>
 			<div id="left" :style="styleLeft"></div>
@@ -80,11 +79,16 @@
 		</div>
 	</div>
 
-<script src="jquery-1.11.3.min.js"></script>
-<script src="vue.min.js"></script>
+	<div class="music" style="display: flex;justify-content: center;">
+		<audio src="oneTime.mp3" controls autoplay="autoplay" loop style="background-color: #ccc;align-items: center;margin-top: 5rem;width: 60%">
+	</div>
+
+	<div>
+		<button onclick="$('.box').autorotate()">默 认</button>
+	</div>
 
 <script type="text/javascript">
-	let x = '500', y = '500', z = '500';
+	let x = '300', y = '300', z = '300';
 	let vm = new Vue({
 		el:'#app',
 		data:{
@@ -179,67 +183,44 @@
 				this.styleBottom.transform = `rotateX(-90deg) translateZ(${this.bottomZ})`;
 				this.stylePre.transform = `translateZ(${this.preZ})`;
 				this.styleBack.transform = `rotateY(180deg) translateZ(${this.backZ})`;
-			},
-			uploadImg(event,n){
-			    var _name, _fileName, personsFile, _img;
-			    // console.log(event)
-			    _name = event.target.value;
-			
-			    // console.log(_name)
-			    _fileName = _name.substring(_name.lastIndexOf(".") + 1).toLowerCase();
-			    if (_fileName !== "png" && _fileName !== "jpg") {
-			        alert("上传图片格式不正确，请重新上传");
-			    } else {
-			    	let url = `url(${window.URL.createObjectURL(event.target.files[0])})`
-			    	
-			        switch(n)
-					{
-						case 1:
-						  this.styleTop.backgroundImage = url
-						  break;
-						case 2:
-						  this.styleBottom.backgroundImage = url
-						  break;
-						case 3:
-							this.styleLeft.backgroundImage = url
-							break;
-						case 4:
-							this.styleRight.backgroundImage = url
-							break;
-						case 5:
-						
-							this.stylePre.backgroundImage = url
-							break;
-						case 6:
-							this.styleBack.backgroundImage = url
-							break;
-						default:
-					  
-					}
-			    }
 			}
 		}
 	})
-
-
 </script>
-<script src="jquery-touchrotate.js"></script>
 <script type="text/javascript">
+	window.onload = function(){
+		// $('.box').autorotate({
+		// 	//初始3D旋转
+		// 	rotateX: 10,
+		// 	rotateY: 40,
+		// 	//数值越小 , 旋转速度越快
+		// 	speedX: 2,
+		// 	speedY: 2,
+		// 	// 旋转的倍数, 越大旋转的圈数越多
+		// 	multipleX: 500,
+		// 	multipleY: 500,
+		// 	// 动画持续的时间, 单位是S
+		// 	time: 80,
+		// 	//模式 0:表示匀速运动 , 运动中途可以重新开始 , 1表示先加速后减速(	动画过程中不可滑动,体验效果差)
+		// 	model: 0,
+		// });
+		$('.box').autorotate();
+	}
 	$('.box').touchrotate({
-		//初始3D旋转
-		rotateX: -15,
-		rotateY: 15,
-		//数值越小 , 旋转速度越快
-		speedX: 2,
-		speedY: 2,
-		// 旋转的倍数, 越大旋转的圈数越多
-		multipleX: 50,
-		multipleY: 50,
-		// 动画持续的时间, 单位是S
-		time: 2,
-		//模式 0:表示匀速运动 , 运动中途可以重新开始 , 1表示先加速后减速(动画过程中不可滑动,体验效果差)
-		model: 0
-	});
+			//初始3D旋转
+			rotateX: 10,
+			rotateY: 40,
+			//数值越小 , 旋转速度越快
+			speedX: 2,
+			speedY: 2,
+			// 旋转的倍数, 越大旋转的圈数越多
+			multipleX: 500,
+			multipleY: 500,
+			// 动画持续的时间, 单位是S
+			time: 50,
+			//模式 0:表示匀速运动 , 运动中途可以重新开始 , 1表示先加速后减速(	动画过程中不可滑动,体验效果差)
+			model: 0,
+		});
 </script>
 
 
