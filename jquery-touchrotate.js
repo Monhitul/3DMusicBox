@@ -280,8 +280,8 @@
 					rotateX %= 360;
 					rotateY %= 360;
 					//设置旋转的值
-					lengthX = lengthX * params.multipleX*10;
-					lengthY = lengthY * params.multipleY*10;
+					lengthX = lengthX * params.multipleX*135;
+					lengthY = lengthY * params.multipleY*42;
 					// lengthX = lengthX / times * params.multipleX*10;
 					// lengthY = lengthY / times * params.multipleY*10;
 
