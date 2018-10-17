@@ -199,6 +199,7 @@
 
 	// 自动旋转
 	$.fn.autorotate = function() {
+		// 模拟鼠标位置坐标
 		var cliX = 570;
 		var cliY = 259;
 		var params = {
@@ -218,7 +219,6 @@
 			//是否有滑动动画(false时只可以拖动)
             isTransition:true,
 		}
-		// params = $.extend(myParams, params);
 		var boxNode = this[0];
 
 		boxNode.style.transform = "rotateX(" + params.rotateX + "deg) rotateY(" + params.rotateY + "deg)";
@@ -242,7 +242,6 @@
 		boxNode.style.transition = "none";
 			
 		//获取到坐标
-		isMove = true;
 		startX = cliX;
 		startY = cliY;
 		dowm_point = {};
@@ -253,150 +252,36 @@
 			dowm_point.Y = cliY;
 		}
 
-			startX = dowm_point.X;
-			console.log("dowm_point.X:"+dowm_point.X);
-			startY = dowm_point.Y;
-			console.log("dowm_point.Y:"+dowm_point.Y);
-			timeStart = (new Date).getTime();
+		startX = dowm_point.X;
+		// console.log("dowm_point.X:"+dowm_point.X);
+		startY = dowm_point.Y;
+		// console.log("dowm_point.Y:"+dowm_point.Y);
+		timeStart = (new Date).getTime();
 			
+		rotateX -= (cliY - dowm_point.Y) / params.speedX;
+		rotateY += (cliX - dowm_point.X) / params.speedY;
 
-			rotateX -= (cliY - dowm_point.Y) / params.speedX;
-			rotateY += (cliX - dowm_point.X) / params.speedY;
+		dowm_point.X = cliX;
+		dowm_point.Y = cliY;
+		if(Math.abs(rotateX%360) == 90) rotateX+=0.1;
+        if(Math.abs(rotateY%360) == 90) rotateY+=0.1;
+        boxNode.style.transform = "rotateX(" + rotateX % 360 + "deg) rotateY(" + rotateY % 360 + "deg)";
 
-			dowm_point.X = cliX;
-			dowm_point.Y = cliY;
-			if(Math.abs(rotateX%360) == 90) rotateX+=0.1;
-            if(Math.abs(rotateY%360) == 90) rotateY+=0.1;
-            boxNode.style.transform = "rotateX(" + rotateX % 360 + "deg) rotateY(" + rotateY % 360 + "deg)";
+		transitionLock = true;
 
-			//获取时间,进行是否缓冲动画判断
-				// var times = (new Date).getTime() - timeStart;
+		rotateX %= 360;
+		rotateY %= 360;
+		//设置旋转的值
+		lengthX = lengthX * params.multipleX*135;
+		lengthY = lengthY * params.multipleY*42;
 
-				// if(times > 0 && (Math.abs(lengthX) > 10 || Math.abs(lengthY) > 10)) {
-				// while(true){
-					console.log("动画开始");
-					transitionLock = true;
+		rotateX -= lengthY;
+		rotateY += lengthX;
 
-					rotateX %= 360;
-					rotateY %= 360;
-					//设置旋转的值
-					lengthX = lengthX * params.multipleX*135;
-					lengthY = lengthY * params.multipleY*42;
-					// lengthX = lengthX / times * params.multipleX*10;
-					// lengthY = lengthY / times * params.multipleY*10;
-
-					rotateX -= lengthY;
-					rotateY += lengthX;
-
-					//记录动画开始的时间
-					transitionStart = (new Date()).getTime();
-					//设置动画
-					boxNode.style.transition = "all " + params.time*10 + "s linear"; // 解决
-					boxNode.style.transform = "rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
-
-				
-
-		// boxNode.addEventListener(mousemove, function(e) {
-
-		// 	e.preventDefault();
-		// 	// 如果鼠标左键没有按下, 那么不可以移动
-		// 	if($.fn.jquery&&!isDown) {
-		// 		return;
-		// 	}
-
-		// 	//如果是先加速后减速运动, 那么中途不可点击
-		// 	if(transitionLock && params.model)
-		// 		return;
-
-		// 	if(!isMove) return;
-		// 	if(!e.clientX) {
-		// 		e.clientX = e.changedTouches[0].clientX;
-		// 		e.clientY = e.changedTouches[0].clientY;
-		// 	}
-			// if(dowm_point.X == undefined) {
-			// 	dowm_point.X = e.clientX;
-			// 	dowm_point.Y = e.clientY;
-			// }
-
-			// if((dowm_point.X > cliX) != isStart) {
-				//判断是否是开始 - 如果方向进行了改变,那么重新记录开始的位置
-
-				// isStart = (dowm_point.X > cliX);
-			// 	startX = dowm_point.X;
-			// 	console.log("dowm_point.X:"+dowm_point.X);
-			// 	startY = dowm_point.Y;
-			// 	console.log("dowm_point.Y:"+dowm_point.Y);
-			// 	timeStart = (new Date).getTime();
-			// }
-
-			// rotateX -= (cliY - dowm_point.Y) / params.speedX;
-			// rotateY += (cliX - dowm_point.X) / params.speedY;
-
-			// dowm_point.X = cliX;
-			// dowm_point.Y = cliY;
-			// if(Math.abs(rotateX%360) == 90) rotateX+=0.1;
-   //          if(Math.abs(rotateY%360) == 90) rotateY+=0.1;
-   //          boxNode.style.transform = "rotateX(" + rotateX % 360 + "deg) rotateY(" + rotateY % 360 + "deg)";
-		// });
-		// document.addEventListener('mouseup',function(){isDown=false;})
-		// boxNode.addEventListener(mouseup, function(e) {
-		// 	e.preventDefault();
-		// 	//如果是先加速后减速运动, 那么中途不可点击
-		// 	if(transitionLock && params.model)
-		// 		return;
-  //           // 如果鼠标左键没有按下, 那么不可以移动
-  //           if($.fn.jquery&&!isDown) {
-  //               return;
-  //           }
-
-		// 	if(!e.clientX) {
-		// 		e.clientX = e.changedTouches[0].clientX;
-		// 		e.clientY = e.changedTouches[0].clientY;
-		// 	}
-
-			// lengthX = cliX - startX;
-			// lengthY = cliY - startY;
-			// if(params.isTransition){
-			// 	//获取时间,进行是否缓冲动画判断
-			// 	var times = (new Date).getTime() - timeStart;
-
-			// 	if(times > 0 && (Math.abs(lengthX) > 10 || Math.abs(lengthY) > 10)) {
-			// 		transitionLock = true;
-
-			// 		rotateX %= 360;
-			// 		rotateY %= 360;
-			// 		//设置旋转的值
-			// 		lengthX = lengthX / times * params.multipleX;
-			// 		lengthY = lengthY / times * params.multipleY;
-
-			// 		rotateX -= lengthY;
-			// 		rotateY += lengthX;
-
-			// 		//记录动画开始的时间
-			// 		transitionStart = (new Date()).getTime();
-			// 		//设置动画
-
-			// 		if(params.model == 0) {
-			// 			boxNode.style.transition = "all " + params.time*10 + "s linear"; // 解决
-			// 		}
-			// 		boxNode.style.transform = "rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
-
-			// 	}
-   //          }else{
-   //              boxNode.style.transition = "none";
-   //              transitionLock = false;
-   //          }
-			// //初始化数据
-			// dowm_point.X = undefined;
-			// dowm_point.Y = undefined;
-			// isMove = false;
-			// isStart = null;
-		// });
-		//监听动画结束
-		// boxNode.addEventListener('transitionend', function() {
-		// 	boxNode.style.transition = "none";
-		// 	transitionLock = false;
-		// 	console.log("结束啦");
-		// });
+		//记录动画开始的时间
+		transitionStart = (new Date()).getTime();
+		//设置动画
+		boxNode.style.transition = "all " + params.time*10 + "s linear"; // 解决
+		boxNode.style.transform = "rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg)";
 	}
 })($);
